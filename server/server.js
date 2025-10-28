@@ -21,6 +21,13 @@ import messsageRoute from "./routes/message.route.js"
 app.use('/api/v1/user', userRouter);
 app.use('/api/v1/message', messsageRoute);
 
+app.get('/', (req, res) => {
+    res.send({
+        activeStatus:true,
+        error:false,
+    })
+})
+
 //middlewares
 import { errorMiddleware } from "./middlewares/error.middleware.js";
 app.use(errorMiddleware);
