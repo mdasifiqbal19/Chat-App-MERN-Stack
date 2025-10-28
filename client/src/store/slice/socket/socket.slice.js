@@ -11,10 +11,12 @@ export const socketSlice = createSlice({
     initialState,
     reducers: {
         initializeSocket: (state, action) => {
-            const socket = io(import.meta.env.VITE_DB_ORIGIN , {
+            const socket = io(import.meta.env.VITE_DB_ORIGIN, {
                 query: {
                     userId: action.payload,
-                }
+                },
+                transports: ['websocket', 'polling'],
+                withCredentials: true,
             });
             state.socket = socket;
         },
