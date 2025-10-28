@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { TextField , Typography} from '@mui/material';
+import { TextField, Typography, CircularProgress, Alert } from '@mui/material';
 import { InputAdornment } from '@mui/material';
 import { Search } from '@mui/icons-material';
 import User from './User';
@@ -10,6 +10,8 @@ import { getOtherUsersThunk, logoutUserThunk } from '../../store/slice/user/user
 const UserSidebar = () => {
 
   const [searchValue, setSearchValue] = useState('');
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
   const dispatch = useDispatch();
   const {otherUsers, userProfile} = useSelector(state => state.userReducer);
   const [users, setUsers] = useState([]);
@@ -32,9 +34,18 @@ const UserSidebar = () => {
 }, [searchValue, otherUsers, userProfile]);
 
   useEffect(() => {
-    (async() => {
-      await dispatch(getOtherUsersThunk())
-    })()
+    const fetchUsers = async () => {
+      try {
+        setLoading(true);
+        setError(null);
+        await dispatch(getOtherUsersThunk()).unwrap();
+      } catch (err) {
+        setError(err.message || 'Failed to fetch users');
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchUsers();
   }, [])
 
   return (
@@ -44,6 +55,11 @@ const UserSidebar = () => {
             </Typography>
         </div>
       
+        {error && (
+          <Alert severity="error" sx={{ mx: 2, my: 1 }}>
+            {error}
+          </Alert>
+        )}
 
       <div>
         <TextField
@@ -62,11 +78,20 @@ const UserSidebar = () => {
         </div>
 
       <div className='h-full overflow-y-scroll px-3 flex flex-col gap-2'>
-            {users?.map(userDetails => {
-              return (
-                <User key={userDetails?._id} userDetails = {userDetails} />
-              )
-            })}
+          {loading ? (
+  <div className="flex justify-center items-center h-full">
+    <CircularProgress />
+  </div>
+) : users?.length === 0 ? (
+  <Typography sx={{ textAlign: 'center', mt: 2, color: 'text.secondary' }}>
+    No users found
+  </Typography>
+) : (
+  users?.map((userDetails) => (
+    <User key={userDetails?._id} userDetails={userDetails} />
+  ))
+)}
+
       </div>
       {/* <div className='flex items-center justify-between p-3'>
         <Stack direction="row" spacing={16}>
