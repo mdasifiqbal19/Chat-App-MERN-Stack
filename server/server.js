@@ -8,7 +8,7 @@ import cors from "cors";
 connectDB();
 
 app.use(cors({
-    origin: [process.env.CLIENT_URL],
+    origin: [process.env.CLIENT_URL, "https://mern-stack-chat-app-asifiqbal.netlify.app/login"],
     credentials: true
 }))
 app.use(express.json());
