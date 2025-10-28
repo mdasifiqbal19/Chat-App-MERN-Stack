@@ -8,7 +8,7 @@ import cors from "cors";
 connectDB();
 
 app.use(cors({
-    origin: [process.env.CLIENT_URL],
+    origin: [process.env.CLIENT_URL, "https://chat-app-mern-stack-ded3.vercel.app/login"],
     credentials: true
 }))
 app.use(express.json());
