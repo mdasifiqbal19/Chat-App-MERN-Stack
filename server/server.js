@@ -11,13 +11,26 @@ app.use(cors({
     origin: [
         process.env.CLIENT_URL,
         "https://mern-stack-chat-app-asifiqbal.netlify.app",
-        "http://localhost:5173", // for local development
-        "http://localhost:5174"  // for local development alternate port
+        "http://localhost:5173",
+        "http://localhost:5174"
     ],
-    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-    allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With', 'Accept'],
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS', 'PATCH'],
+    allowedHeaders: [
+        'Content-Type', 
+        'contenttype',
+        'Authorization', 
+        'X-Requested-With', 
+        'Accept',
+        'Origin',
+        'Access-Control-Allow-Headers',
+        'Access-Control-Request-Method',
+        'Access-Control-Request-Headers'
+    ],
+    exposedHeaders: ['Content-Type', 'Authorization'],
     credentials: true,
-    optionsSuccessStatus: 200
+    optionsSuccessStatus: 200,
+    preflightContinue: false,
+    maxAge: 86400 // 24 hours
 }))
 app.use(express.json());
 app.use(cookieParser());
